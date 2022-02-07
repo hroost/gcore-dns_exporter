@@ -15,13 +15,6 @@ import requests
 import datetime
 
 # -------------------------------------------------------
-# Reset local cache
-# -------------------------------------------------------
-def resetCacheState(cache):
-  for zone in cache:
-    GaugeZoneStats.labels(zone).set(0)
-
-# -------------------------------------------------------
 # Get zones list
 # -------------------------------------------------------
 def getZones():
@@ -35,7 +28,7 @@ def getZones():
 # -------------------------------------------------------
 # Get zone stats
 # -------------------------------------------------------
-def getZoneStats(zones, dt_from, dt_to, cache):
+def getZoneStats(zones, dt_from, dt_to):
   sys.stdout.write('Zones count: ' + str(zones['total_amount']) + ' [limit: ' + str(gcore_dns_api_zones_limit)+ ']\n')
 
   for zone in zones['zones']:
@@ -52,7 +45,6 @@ def getZoneStats(zones, dt_from, dt_to, cache):
       zone_stats_total = r.json()['total']
       sys.stdout.write('* zone: ' + str(zone) + ' Reqs: ' + str(zone_stats_total) + '\n')
       GaugeZoneStats.labels(zone).set(zone_stats_total)
-      cache[zone] = True
     except Exception as e:
       sys.stderr.write('error:'+str(e))
       exit(1)
@@ -84,16 +76,14 @@ def main():
   # Start up the server to expose the metrics.
   start_http_server(port)
 
-  cache = {}
-
   # Generate some requests.
   while True:
       zones = getZones()
-      # Reset internal cache
-      resetCacheState(cache)
+      # Reset per zone metrics
+      GaugeZoneStats.clear()
       dt_from = int(datetime.datetime.combine(datetime.datetime.today(), datetime.time.min).timestamp()) # timestamp of today midnight
       dt_to = int(datetime.datetime.now().timestamp()) # timestamp now
-      getZoneStats(zones, dt_from, dt_to, cache)
+      getZoneStats(zones, dt_from, dt_to)
       getAllZonesStats(dt_from, dt_to)
       time.sleep(interval)
 
