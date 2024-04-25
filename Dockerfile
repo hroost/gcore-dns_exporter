@@ -1,6 +1,6 @@
 FROM python:3.12-slim
 
-RUN ip install pip --upgrade && \
+RUN pip install pip --upgrade && \
     pip install requests && \
     pip install prometheus_client
 
