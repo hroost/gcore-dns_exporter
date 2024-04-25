@@ -32,7 +32,7 @@ def getZoneStats(zones, dt_from, dt_to):
   sys.stdout.write('Zones count: ' + str(zones['total_amount']) + ' [limit: ' + str(gcore_dns_api_zones_limit)+ ']\n')
 
   for zone in zones['zones']:
-    # Avoid rate limiting. See https://apidocs.gcorelabs.com/account#section/Rate-Limits
+    # Avoid rate limiting. See https://api.gcore.com/docs/iam#section/Rate-limits-and-throttling
     time.sleep(0.5)
     zone = zone['name']
     try:
@@ -97,7 +97,7 @@ port = int(os.getenv('PORT', 9886))
 # Refresh interval between collects in seconds - default 300
 interval = int(os.getenv('INTERVAL', 300))
 
-gcore_dns_api_url = os.getenv('GCORE_DNS_API_URL', 'https://dnsapi.gcorelabs.com/v2')
+gcore_dns_api_url = os.getenv('GCORE_DNS_API_URL', 'https://api.gcore.com/dns/v2')
 gcore_dns_api_key = os.getenv('GCORE_DNS_API_KEY', None)
 # Amount of zones for getZones() - default 999
 gcore_dns_api_zones_limit = int(os.getenv('GCORE_DNS_API_ZONES_LIMIT', 999))
