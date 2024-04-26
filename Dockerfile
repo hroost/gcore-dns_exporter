@@ -1,6 +1,7 @@
-FROM python:3.9
+FROM python:3.12-slim
 
-RUN pip install requests && \
+RUN pip install pip --upgrade && \
+    pip install requests && \
     pip install prometheus_client
 
 ADD exporter.py /
