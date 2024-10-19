@@ -68,7 +68,6 @@ def getZoneStats(zones: str, dt_from: int, dt_to: int, timeout: int):
         )
         GaugeZoneStats.labels(zone).set(zone_stats_total)
 
-
 # -------------------------------------------------------
 # Get all zones stats
 # -------------------------------------------------------
@@ -130,10 +129,10 @@ port = int(os.getenv("PORT", 9886))
 interval = int(os.getenv("INTERVAL", 300))
 timeout = int(os.getenv("TIMEOUT", 10))
 
-gcore_dns_api_url = os.getenv("GCORE_DNS_API_URL", "https://api.gcore.com/dns/v2")
-gcore_dns_api_key = os.getenv("GCORE_DNS_API_KEY", None)
-# Amount of zones for getZones() - default : 999
-gcore_dns_api_zones_limit = int(os.getenv("GCORE_DNS_API_ZONES_LIMIT", 999))
+gcore_dns_api_url = os.getenv('GCORE_DNS_API_URL', 'https://api.gcore.com/dns/v2')
+gcore_dns_api_key = os.getenv('GCORE_DNS_API_KEY', None)
+# Amount of zones for getZones() - default 999
+gcore_dns_api_zones_limit = int(os.getenv('GCORE_DNS_API_ZONES_LIMIT', 999))
 
 if not gcore_dns_api_key:
     sys.stderr.write(
